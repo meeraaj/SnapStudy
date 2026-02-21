@@ -1,0 +1,44 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - ../../base
+
+patches:
+  # Use Spot instances for non-critical pods (notes-service, progress-service)
+  - target:
+      kind: Deployment
+      name: notes-service
+    patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: notes-service
+      spec:
+        template:
+          spec:
+            tolerations:
+              - key: "kubernetes.azure.com/scalesetpriority"
+                operator: "Equal"
+                value: "spot"
+                effect: "NoSchedule"
+            nodeSelector:
+              "kubernetes.azure.com/scalesetpriority": "spot"
+  - target:
+      kind: Deployment
+      name: progress-service
+    patch: |-
+      apiVersion: apps/v1
+      kind: Deployment
+      metadata:
+        name: progress-service
+      spec:
+        template:
+          spec:
+            tolerations:
+              - key: "kubernetes.azure.com/scalesetpriority"
+                operator: "Equal"
+                value: "spot"
+                effect: "NoSchedule"
+            nodeSelector:
+              "kubernetes.azure.com/scalesetpriority": "spot"

@@ -1,0 +1,73 @@
+version: "3.9"
+
+services:
+  # ── PostgreSQL ──────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: snapstudy
+      POSTGRES_PASSWORD: snapstudy
+      POSTGRES_DB: snapstudy
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U snapstudy" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ── Alembic Migration Runner ────────────────
+  migrate:
+    build:
+      context: ./packages/db-migrations
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: postgresql://snapstudy:snapstudy@postgres:5432/snapstudy
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # ── API Gateway ─────────────────────────────
+  api-gateway:
+    build: ./apps/api-gateway
+    ports:
+      - "4000:4000"
+    environment:
+      DATABASE_URL: postgresql://snapstudy:snapstudy@postgres:5432/snapstudy
+      NOTES_SERVICE_URL: http://notes-service:4001
+      PROGRESS_SERVICE_URL: http://progress-service:4002
+      JWT_SECRET: ${JWT_SECRET:-dev-secret}
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+  # ── Notes Service ───────────────────────────
+  notes-service:
+    build: ./apps/notes-service
+    ports:
+      - "4001:4001"
+    environment:
+      DATABASE_URL: postgresql://snapstudy:snapstudy@postgres:5432/snapstudy
+      AZURE_STORAGE_CONNECTION_STRING: ${AZURE_STORAGE_CONNECTION_STRING:-}
+      AZURE_STORAGE_CONTAINER_NAME: ${AZURE_STORAGE_CONTAINER_NAME:-photo-notes}
+      AZURE_FORM_RECOGNIZER_ENDPOINT: ${AZURE_FORM_RECOGNIZER_ENDPOINT:-}
+      AZURE_FORM_RECOGNIZER_KEY: ${AZURE_FORM_RECOGNIZER_KEY:-}
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+  # ── Progress Service ────────────────────────
+  progress-service:
+    build: ./apps/progress-service
+    ports:
+      - "4002:4002"
+    environment:
+      DATABASE_URL: postgresql://snapstudy:snapstudy@postgres:5432/snapstudy
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+volumes:
+  pgdata:
