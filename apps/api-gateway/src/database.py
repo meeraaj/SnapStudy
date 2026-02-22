@@ -1,4 +1,4 @@
-"""Database engine and session configuration."""
+"""Database engine and session configuration for API Gateway."""
 
 import os
 
@@ -17,10 +17,6 @@ engine = create_engine(DATABASE_URL, echo=False)
 def init_db() -> None:
     """Import models so they register with SQLModel.metadata."""
     import src.models.user  # noqa: F401
-    import src.models.subject  # noqa: F401
-    import src.models.chapter  # noqa: F401
-    import src.models.topic  # noqa: F401
-    import src.models.note  # noqa: F401
 
 
 def get_session():

@@ -5,6 +5,9 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from src.database import init_db
+from src.routes.subjects import router as subjects_router
+from src.routes.chapters import router as chapters_router
+from src.routes.progress import router as progress_router
 
 
 @asynccontextmanager
@@ -18,6 +21,10 @@ app = FastAPI(
     version="0.1.0",
     lifespan=lifespan,
 )
+
+app.include_router(subjects_router)
+app.include_router(chapters_router)
+app.include_router(progress_router)
 
 
 @app.get("/health")

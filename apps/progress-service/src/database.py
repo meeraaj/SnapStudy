@@ -15,7 +15,8 @@ engine = create_engine(DATABASE_URL, echo=False)
 
 
 def init_db() -> None:
-    """Import models so they register with SQLModel.metadata, then create tables."""
+    """Import models so they register with SQLModel.metadata."""
+    import src.models.user  # noqa: F401
     import src.models.subject  # noqa: F401
     import src.models.chapter  # noqa: F401
     import src.models.user_progress  # noqa: F401

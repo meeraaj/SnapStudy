@@ -1,1 +1,3 @@
-# Placeholder — notes CRUD routes will be added in Step 2
+from src.routes.notes import router as notes_router
+
+__all__ = ["notes_router"]
