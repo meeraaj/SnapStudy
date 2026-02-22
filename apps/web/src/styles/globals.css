@@ -1,1 +1,108 @@
 @import "tailwindcss";
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap");
+
+@theme {
+    --color-brand-50: #f0f7ff;
+    --color-brand-100: #e0efff;
+    --color-brand-200: #b9dfff;
+    --color-brand-300: #7cc8ff;
+    --color-brand-400: #36aeff;
+    --color-brand-500: #0c93f0;
+    --color-brand-600: #0074cd;
+    --color-brand-700: #005ca6;
+    --color-brand-800: #024f89;
+    --color-brand-900: #084271;
+    --color-brand-950: #062a4b;
+
+    --color-surface: #0f1117;
+    --color-surface-raised: #171923;
+    --color-surface-overlay: #1e2130;
+    --color-surface-border: #2a2d3a;
+    --color-surface-hover: #252838;
+
+    --color-text-primary: #f0f1f5;
+    --color-text-secondary: #9ca3b4;
+    --color-text-muted: #636b7e;
+
+    --color-success: #34d399;
+    --color-warning: #fbbf24;
+    --color-danger: #f87171;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    margin: 0;
+    background-color: var(--color-surface);
+    color: var(--color-text-primary);
+    min-height: 100vh;
+}
+
+/* Smooth scrollbar */
+::-webkit-scrollbar {
+    width: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--color-surface-border);
+    border-radius: 3px;
+}
+
+/* Focus ring */
+*:focus-visible {
+    outline: 2px solid var(--color-brand-500);
+    outline-offset: 2px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-12px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes pulse-ring {
+    0% {
+        stroke-dashoffset: var(--ring-offset);
+    }
+}
+
+.animate-fade-in {
+    animation: fadeIn 0.4s ease-out both;
+}
+
+.animate-slide-in {
+    animation: slideIn 0.3s ease-out both;
+}

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "@/styles/globals.css";
+import ClientProviders from "@/components/client-providers";
 
 export const metadata: Metadata = {
     title: "SnapStudy — Photo-Note Study Tracker",
@@ -14,7 +15,9 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
-            <body>{children}</body>
+            <body>
+                <ClientProviders>{children}</ClientProviders>
+            </body>
         </html>
     );
 }
