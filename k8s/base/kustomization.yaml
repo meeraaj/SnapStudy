@@ -5,6 +5,9 @@ namespace: snapstudy
 
 resources:
   - namespace.yaml
+  - secrets.yaml
+  - postgres.yaml
+  - migration-job.yaml
   - web-deployment.yaml
   - api-gateway-deployment.yaml
   - notes-service-deployment.yaml

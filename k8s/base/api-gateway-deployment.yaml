@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: api-gateway
-          image: snapstudy/api-gateway:latest
+          image: snapstudyacr.azurecr.io/api-gateway:latest
           ports:
             - containerPort: 4000
           resources:

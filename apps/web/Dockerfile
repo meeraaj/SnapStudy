@@ -4,14 +4,17 @@ RUN corepack enable
 # ── Install ────────────────────────────────
 FROM base AS deps
 WORKDIR /app
-COPY package.json pnpm-lock.yaml* ./
-RUN pnpm install --frozen-lockfile
+COPY package.json ./
+RUN pnpm install
 
 # ── Build ──────────────────────────────────
 FROM base AS builder
 WORKDIR /app
+ARG NEXT_PUBLIC_API_URL=http://4.188.97.229:4000
+ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+RUN mkdir -p public
 RUN pnpm build
 
 # ── Run ────────────────────────────────────

@@ -28,8 +28,8 @@ class UserRegister(BaseModel):
     """POST /auth/register request body."""
 
     email: str = PydanticField(max_length=320)
-    display_name: str = PydanticField(max_length=100)
-    password: str = PydanticField(min_length=8)
+    display_name: str
+    password: str
 
 
 class UserLogin(BaseModel):

@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-NOTES_SERVICE_PORT = int(os.getenv("NOTES_SERVICE_PORT", "4001"))
+APP_PORT = int(os.getenv("APP_PORT", "4001"))
 DATABASE_URL = os.getenv(
     "DATABASE_URL", "postgresql://snapstudy:snapstudy@localhost:5432/snapstudy"
 )

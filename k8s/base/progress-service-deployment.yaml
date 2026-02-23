@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: progress-service
-          image: snapstudy/progress-service:latest
+          image: snapstudyacr.azurecr.io/progress-service:latest
           ports:
             - containerPort: 4002
           resources:

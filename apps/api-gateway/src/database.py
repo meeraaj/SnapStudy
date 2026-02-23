@@ -15,8 +15,10 @@ engine = create_engine(DATABASE_URL, echo=False)
 
 
 def init_db() -> None:
-    """Import models so they register with SQLModel.metadata."""
+    """Import models and create all tables."""
     import src.models.user  # noqa: F401
+
+    SQLModel.metadata.create_all(engine)
 
 
 def get_session():

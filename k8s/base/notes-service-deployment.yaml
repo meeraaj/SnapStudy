@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: notes-service
-          image: snapstudy/notes-service:latest
+          image: snapstudyacr.azurecr.io/notes-service:latest
           ports:
             - containerPort: 4001
           resources:
