@@ -9,7 +9,7 @@ from sqlmodel import Session, select
 from src.database import get_session
 from src.models.note import PhotoNote
 from src.services.blob_storage import delete_blob, upload_blob
-from src.services.ocr import extract_text_from_image
+from src.services.ocr import extract_text_from_image, summarize_image
 
 from pydantic import BaseModel
 
@@ -21,7 +21,7 @@ router = APIRouter(prefix="/notes", tags=["notes"])
 
 class NoteResponse(BaseModel):
     id: uuid.UUID
-    topic_id: uuid.UUID
+    topic_id: uuid.UUID | None
     user_id: uuid.UUID
     blob_url: str
     file_name: str
@@ -29,6 +29,7 @@ class NoteResponse(BaseModel):
     mime_type: str
     caption: str | None
     ocr_text: str | None
+    ai_summary: str | None
     page_number: int
     created_at: datetime
     updated_at: datetime
@@ -41,7 +42,7 @@ class NoteResponse(BaseModel):
 @router.post("/", response_model=NoteResponse, status_code=status.HTTP_201_CREATED)
 async def upload_note(
     file: UploadFile = File(...),
-    topic_id: uuid.UUID = Form(...),
+    topic_id: uuid.UUID | None = Form(None),
     caption: str | None = Form(None),
     page_number: int = Form(1),
     user_id: uuid.UUID = Query(...),
@@ -125,3 +126,40 @@ def delete_note(
 
     session.delete(note)
     session.commit()
+
+
+# ── AI Summary ───────────────────────────────────────────────
+
+
+class SummaryResponse(BaseModel):
+    id: uuid.UUID
+    ai_summary: str
+
+
+@router.post("/{note_id}/summarize", response_model=SummaryResponse)
+def summarize_note(
+    note_id: uuid.UUID,
+    session: Session = Depends(get_session),
+):
+    """Generate an AI summary of a photo-note using Qwen3-VL vision model."""
+    note = session.get(PhotoNote, note_id)
+    if not note:
+        raise HTTPException(status_code=404, detail="Note not found")
+
+    # Read the image data from local storage or blob
+    import pathlib
+    local_path = pathlib.Path("/app/uploads") / note.blob_key
+    if not local_path.exists():
+        raise HTTPException(status_code=404, detail="Image file not found on disk")
+
+    image_data = local_path.read_bytes()
+    summary = summarize_image(image_data)
+
+    # Persist the summary
+    note.ai_summary = summary
+    note.updated_at = datetime.now()
+    session.add(note)
+    session.commit()
+    session.refresh(note)
+
+    return SummaryResponse(id=note.id, ai_summary=summary)

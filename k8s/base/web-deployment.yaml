@@ -26,4 +26,4 @@ spec:
               memory: "256Mi"
           env:
             - name: NEXT_PUBLIC_API_URL
-              value: "http://4.188.97.229:4000"
+              value: "http://snapstudy-api.centralindia.cloudapp.azure.com:4000"

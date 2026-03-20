@@ -48,12 +48,17 @@ services:
     build: ./apps/notes-service
     ports:
       - "4001:4001"
+    volumes:
+      - uploads:/app/uploads
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     environment:
       DATABASE_URL: postgresql://snapstudy:snapstudy@postgres:5432/snapstudy
       AZURE_STORAGE_CONNECTION_STRING: ${AZURE_STORAGE_CONNECTION_STRING:-}
       AZURE_STORAGE_CONTAINER_NAME: ${AZURE_STORAGE_CONTAINER_NAME:-photo-notes}
       AZURE_FORM_RECOGNIZER_ENDPOINT: ${AZURE_FORM_RECOGNIZER_ENDPOINT:-}
       AZURE_FORM_RECOGNIZER_KEY: ${AZURE_FORM_RECOGNIZER_KEY:-}
+      OLLAMA_BASE_URL: http://172.17.0.1:11434
     depends_on:
       migrate:
         condition: service_completed_successfully
@@ -71,3 +76,4 @@ services:
 
 volumes:
   pgdata:
+  uploads:

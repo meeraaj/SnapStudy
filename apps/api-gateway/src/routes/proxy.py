@@ -11,6 +11,7 @@ router = APIRouter(tags=["proxy"])
 # Map path prefixes to downstream service URLs
 SERVICE_MAP = {
     "/notes": NOTES_SERVICE_URL,
+    "/uploads": NOTES_SERVICE_URL,
     "/subjects": PROGRESS_SERVICE_URL,
     "/chapters": PROGRESS_SERVICE_URL,
     "/progress": PROGRESS_SERVICE_URL,
@@ -50,7 +51,7 @@ async def proxy(
 
     body = await request.body()
 
-    async with httpx.AsyncClient(timeout=30.0) as client:
+    async with httpx.AsyncClient(timeout=600.0) as client:
         resp = await client.request(
             method=request.method,
             url=target_url,
@@ -59,6 +60,24 @@ async def proxy(
             headers={
                 "content-type": request.headers.get("content-type", "application/json"),
             },
+        )
+
+    return Response(
+        content=resp.content,
+        status_code=resp.status_code,
+        media_type=resp.headers.get("content-type"),
+    )
+
+
+@router.get("/uploads/{path:path}")
+async def proxy_uploads(path: str, request: Request):
+    """Proxy unauthenticated requests for static images directly to notes-service."""
+    target_url = f"{NOTES_SERVICE_URL}/uploads/{path}"
+    
+    async with httpx.AsyncClient(timeout=600.0) as client:
+        resp = await client.request(
+            method="GET",
+            url=target_url,
         )
 
     return Response(

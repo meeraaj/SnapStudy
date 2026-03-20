@@ -10,7 +10,7 @@ RUN pnpm install
 # ── Build ──────────────────────────────────
 FROM base AS builder
 WORKDIR /app
-ARG NEXT_PUBLIC_API_URL=http://4.188.97.229:4000
+ARG NEXT_PUBLIC_API_URL=http://snapstudy-api.centralindia.cloudapp.azure.com:4000
 ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .

@@ -1,0 +1,63 @@
+name: snapstudy-app
+region: nyc
+database:
+  - name: snapstudy-db
+    engine: PG
+    version: "16"
+
+services:
+  - name: api-gateway
+    github:
+      branch: main
+      deploy_on_push: true
+    source_dir: apps/api-gateway
+    dockerfile_path: Dockerfile
+    http_port: 4000
+    instance_size_slug: basic-xxs
+    instance_count: 1
+    envs:
+      - key: DATABASE_URL
+        value: ${snapstudy-db.DATABASE_URL}
+
+  - name: notes-service
+    github:
+      branch: main
+      deploy_on_push: true
+    source_dir: apps/notes-service
+    dockerfile_path: Dockerfile
+    http_port: 4001
+    instance_size_slug: basic-xxs
+    instance_count: 1
+    envs:
+      - key: DATABASE_URL
+        value: ${snapstudy-db.DATABASE_URL}
+      - key: OLLAMA_EXTERNAL_URL
+        value: "" # Fill this in with your Cloudflare Tunnel URL!
+
+  - name: progress-service
+    github:
+      branch: main
+      deploy_on_push: true
+    source_dir: apps/progress-service
+    dockerfile_path: Dockerfile
+    http_port: 4002
+    instance_size_slug: basic-xxs
+    instance_count: 1
+    envs:
+      - key: DATABASE_URL
+        value: ${snapstudy-db.DATABASE_URL}
+
+  - name: web
+    github:
+      branch: main
+      deploy_on_push: true
+    source_dir: apps/web
+    environment_slug: node-js
+    build_command: pnpm install && pnpm build
+    run_command: pnpm start
+    http_port: 3000
+    instance_size_slug: basic-xxs
+    instance_count: 1
+    envs:
+      - key: NEXT_PUBLIC_API_URL
+        value: ${api-gateway.PUBLIC_URL}

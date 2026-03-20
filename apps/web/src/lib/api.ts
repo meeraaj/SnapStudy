@@ -2,7 +2,7 @@
  * Thin fetch wrapper for the SnapStudy API Gateway.
  */
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
+export const API_BASE = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000";
 
 /* ── helpers ─────────────────────────────────────────────── */
 
@@ -115,9 +115,15 @@ export interface Note {
     mime_type: string;
     caption: string | null;
     ocr_text: string | null;
+    ai_summary: string | null;
     page_number: number;
     created_at: string;
     updated_at: string;
+}
+
+export interface SummaryResponse {
+    id: string;
+    ai_summary: string;
 }
 
 /* ── api object ──────────────────────────────────────────── */
@@ -193,10 +199,10 @@ export const api = {
             return request<Note[]>(url);
         },
 
-        upload: (userId: string, topicId: string, file: File, caption?: string) => {
+        upload: (userId: string, file: File, topicId?: string, caption?: string) => {
             const form = new FormData();
             form.append("file", file);
-            form.append("topic_id", topicId);
+            if (topicId) form.append("topic_id", topicId);
             if (caption) form.append("caption", caption);
             return request<Note>(`/api/notes/?user_id=${userId}`, {
                 method: "POST",
@@ -206,5 +212,10 @@ export const api = {
 
         delete: (id: string) =>
             request<void>(`/api/notes/${id}`, { method: "DELETE" }),
+
+        summarize: (noteId: string) =>
+            request<SummaryResponse>(`/api/notes/${noteId}/summarize`, {
+                method: "POST",
+            }),
     },
 };

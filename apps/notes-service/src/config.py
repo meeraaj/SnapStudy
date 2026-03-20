@@ -10,10 +10,11 @@ DATABASE_URL = os.getenv(
     "DATABASE_URL", "postgresql://snapstudy:snapstudy@localhost:5432/snapstudy"
 )
 
-# Azure Blob Storage
-AZURE_STORAGE_CONNECTION_STRING = os.getenv("AZURE_STORAGE_CONNECTION_STRING", "")
-AZURE_STORAGE_CONTAINER_NAME = os.getenv("AZURE_STORAGE_CONTAINER_NAME", "photo-notes")
+# Standard DigitalOcean Spaces / Storage (Replaces Azure)
+DO_SPACES_ENDPOINT = os.getenv("DO_SPACES_ENDPOINT", "")
+DO_SPACES_KEY = os.getenv("DO_SPACES_KEY", "")
+DO_SPACES_SECRET = os.getenv("DO_SPACES_SECRET", "")
 
-# Azure AI Document Intelligence (Form Recognizer)
-AZURE_FORM_RECOGNIZER_ENDPOINT = os.getenv("AZURE_FORM_RECOGNIZER_ENDPOINT", "")
-AZURE_FORM_RECOGNIZER_KEY = os.getenv("AZURE_FORM_RECOGNIZER_KEY", "")
+# Ollama (Hybrid Cloud-to-Local AI Setup)
+OLLAMA_EXTERNAL_URL = os.getenv("OLLAMA_EXTERNAL_URL", "") # Cloudflare Tunnel URL
+OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://host.docker.internal:11434")
