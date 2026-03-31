@@ -1,0 +1,17 @@
+# Environments
+venv/
+env/
+.env
+
+# Cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Data & Documents
+data/
+*.pdf
+*.md
+
+# OS specific
+.DS_Store
