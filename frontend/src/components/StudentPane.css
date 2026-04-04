@@ -1,0 +1,120 @@
+.student-pane {
+  width: var(--sidebar-width);
+  height: 100%;
+  border-radius: var(--radius-lg);
+}
+
+.pane-header {
+  padding: 20px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.pane-title {
+  font-size: 1.1rem;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pane-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.course-title {
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+  font-size: 1.05rem;
+}
+
+.subject-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.subject-item {
+  color: var(--text-secondary);
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  position: relative;
+  padding-left: 20px;
+}
+
+.subject-item:hover, .subject-item.active {
+  color: var(--accent-primary);
+}
+
+.bullet {
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--text-muted);
+  transition: all 0.2s ease;
+}
+
+.subject-item:hover .bullet, .subject-item.active .bullet {
+  background-color: var(--accent-primary);
+  box-shadow: 0 0 8px var(--accent-glow);
+}
+
+.sub-list {
+  list-style: none;
+  padding-left: 12px;
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.sub-list li {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  transition: color 0.2s;
+}
+
+.sub-list li:hover {
+  color: var(--text-secondary);
+}
+
+.pane-footer {
+  padding: 20px;
+  border-top: 1px solid var(--border-color);
+  background: var(--bg-tertiary);
+  border-bottom-left-radius: var(--radius-lg);
+  border-bottom-right-radius: var(--radius-lg);
+}
+
+.search-label {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-bottom: 8px;
+}
+
+.search-input-wrapper {
+  position: relative;
+}
+
+.search-input {
+  border-radius: 99px;
+  padding-right: 40px;
+  background: var(--bg-secondary);
+}
+
+.search-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}

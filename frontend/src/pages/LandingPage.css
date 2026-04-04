@@ -1,0 +1,91 @@
+.landing-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 2rem;
+}
+
+.landing-content {
+  max-width: 800px;
+  text-align: center;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  background: rgba(99, 102, 241, 0.1);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  border-radius: 99px;
+  color: var(--accent-primary);
+  font-weight: 500;
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+}
+
+.hero-title {
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  color: var(--text-primary);
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  max-width: 600px;
+  line-height: 1.6;
+}
+
+.hero-actions {
+  margin-top: 1rem;
+}
+
+.primary-btn {
+  font-size: 1.1rem;
+  padding: 14px 32px;
+  border-radius: var(--radius-md);
+}
+
+/* Background glows */
+.bg-glow {
+  position: absolute;
+  filter: blur(100px);
+  border-radius: 50%;
+  z-index: 1;
+  opacity: 0.4;
+  animation: pulse-glow 8s infinite alternate;
+}
+
+.glow-1 {
+  top: -10%;
+  left: 10%;
+  width: 500px;
+  height: 500px;
+  background: rgba(99, 102, 241, 0.2);
+}
+
+.glow-2 {
+  bottom: -10%;
+  right: 10%;
+  width: 400px;
+  height: 400px;
+  background: rgba(168, 85, 247, 0.15);
+  animation-delay: 2s;
+}
