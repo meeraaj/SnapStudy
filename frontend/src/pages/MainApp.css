@@ -4,35 +4,93 @@
   padding: 16px;
   overflow: hidden;
   background: var(--bg-primary);
-  background-image: 
-    radial-gradient(circle at 0% 0%, rgba(99, 102, 241, 0.05) 0%, transparent 50%),
-    radial-gradient(circle at 100% 100%, rgba(168, 85, 247, 0.05) 0%, transparent 50%);
+  background-image:
+    radial-gradient(circle at 0% 0%, rgba(99,102,241,0.05) 0%, transparent 50%),
+    radial-gradient(circle at 100% 100%, rgba(168,85,247,0.05) 0%, transparent 50%);
 }
 
 .main-layout {
   display: flex;
-  gap: 16px;
+  gap: 0;
   height: 100%;
-  max-width: 1600px;
+  max-width: 1800px;
   margin: 0 auto;
+  position: relative;
 }
 
+/* ── Sidebar wrapper ── */
+.sidebar-wrapper {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  transition: width 0.3s ease, opacity 0.3s ease;
+  overflow: visible;
+}
+
+.left-sidebar-wrapper  { width: 220px; }
+.right-sidebar-wrapper { width: 320px; }
+
+.left-sidebar-wrapper.collapsed  { width: 0; }
+.right-sidebar-wrapper.collapsed { width: 0; }
+
+.sidebar-inner {
+  overflow: hidden;
+  flex: 1;
+  min-width: 0;
+  transition: opacity 0.3s ease;
+}
+
+.left-sidebar-wrapper.collapsed  .sidebar-inner,
+.right-sidebar-wrapper.collapsed .sidebar-inner {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ── Toggle buttons ── */
+.sidebar-toggle-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 52px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  font-size: 1rem;
+  cursor: pointer;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  box-shadow: none;
+  transform: translateY(-50%);
+}
+
+.sidebar-toggle-btn:hover {
+  background: var(--accent-glow);
+  color: var(--accent-primary);
+  border-color: var(--accent-primary);
+  box-shadow: none;
+  transform: translateY(-50%);
+}
+
+.left-toggle-btn  { right: -10px; }
+.right-toggle-btn { left: -10px; }
+
+/* ── Center ── */
 .center-wrapper {
   flex: 1;
   display: flex;
   min-width: 0;
+  margin: 0 12px;
+  transition: all 0.3s ease;
 }
 
 .center-pane {
   flex: 1;
-  padding: 4px;
-}
-
-.center-header {
-  padding: 12px 20px;
-  border-bottom: 1px solid var(--border-color);
-  color: var(--text-secondary);
-  font-size: 0.9rem;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  overflow: hidden;
+  padding: 0;
 }

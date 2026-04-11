@@ -1,0 +1,39 @@
+.pdf-viewer-wrapper { display:flex; flex-direction:column; height:100%; background:var(--bg-tertiary); }
+.pdf-toolbar { display:flex; align-items:center; justify-content:space-between; padding:8px 16px; background:var(--bg-secondary); border-bottom:1px solid var(--border-color); flex-shrink:0; gap:24px; }
+.pdf-nav, .pdf-zoom { display:flex; align-items:center; gap:10px; }
+.pdf-btn { background:var(--bg-tertiary); color:var(--text-primary); border:1px solid var(--border-color); padding:5px 12px; border-radius:6px; font-size:1.1rem; cursor:pointer; transition:all 0.15s ease; box-shadow:none; transform:none; }
+.pdf-btn:hover:not(:disabled) { background:var(--accent-glow); border-color:var(--accent-primary); color:var(--accent-primary); transform:none; }
+.pdf-btn:disabled { opacity:0.3; cursor:not-allowed; }
+.pdf-page-info, .pdf-scale-label { font-size:0.88rem; color:var(--text-secondary); min-width:80px; text-align:center; }
+.pdf-canvas-scroll { flex:1; overflow:auto; display:flex; justify-content:center; align-items:flex-start; padding:24px 16px; background:var(--bg-tertiary); }
+.pdf-canvas-container { box-shadow:0 8px 30px rgba(0,0,0,0.4); border-radius:4px; overflow:hidden; background:white; }
+.pdf-canvas-container canvas { display:block; }
+.pdf-loading { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; color:var(--text-muted); }
+.pdf-spinner { width:40px; height:40px; border:3px solid var(--border-color); border-top-color:var(--accent-primary); border-radius:50%; animation:spin 0.8s linear infinite; }
+@keyframes spin { to { transform:rotate(360deg); } }
+.pdf-error { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; padding:40px; text-align:center; color:var(--text-secondary); }
+.pdf-error-icon { font-size:3rem; }
+.pdf-error-msg { font-size:1rem; color:var(--text-primary); }
+
+/* Text selection layer */
+.pdf-text-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  line-height: 1;
+  pointer-events: all;
+}
+
+.pdf-text-layer span {
+  color: transparent;
+  position: absolute;
+  white-space: pre;
+  cursor: text;
+  transform-origin: 0% 0%;
+}
+
+.pdf-text-layer span::selection {
+  background: rgba(99, 102, 241, 0.35);
+  color: transparent;
+}

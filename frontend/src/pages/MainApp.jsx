@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import StudentPane from '../components/StudentPane';
 import BookPane from '../components/BookPane';
 import AIAssistant from '../components/AIAssistant';
@@ -7,17 +7,19 @@ import { markChapterCompleted } from '../utils/progress';
 import './MainApp.css';
 
 const MainApp = () => {
-  const [activeBookId, setActiveBookId] = useState('llm-docs');
-  const [activeChapterId, setActiveChapterId] = useState('ch_0');
+  const firstBookId = Object.keys(bookData.books)[0];
+  const [activeBookId, setActiveBookId] = useState(firstBookId);
+  const [activeChapterId, setActiveChapterId] = useState(
+    bookData.books[firstBookId]?.toc?.[0]?.id || null
+  );
+  const [isLeftCollapsed, setIsLeftCollapsed] = useState(false);
+  const [isRightCollapsed, setIsRightCollapsed] = useState(false);
 
   const handleSelectBook = (bookId) => {
     setActiveBookId(bookId);
-    
-    // Auto-select first chapter of the new book
     const book = bookData.books[bookId];
-    if (book && book.toc && book.toc.length > 0) {
+    if (book?.toc?.length > 0) {
       setActiveChapterId(book.toc[0].id);
-      markChapterCompleted(bookId, book.toc[0].id);
     } else {
       setActiveChapterId(null);
     }
@@ -25,36 +27,37 @@ const MainApp = () => {
 
   const handleSelectChapter = (chapterId) => {
     setActiveChapterId(chapterId);
-    // Mark as complete whenever a user views it!
-    if (activeBookId) {
-      markChapterCompleted(activeBookId, chapterId);
-    }
+    if (activeBookId) markChapterCompleted(activeBookId, chapterId);
   };
-
-  // Run on initial mount
-  useEffect(() => {
-    if (activeBookId && activeChapterId) {
-       markChapterCompleted(activeBookId, activeChapterId);
-    }
-  }, [activeBookId, activeChapterId]);
 
   const activeBookData = activeBookId ? bookData.books[activeBookId] : null;
 
   return (
     <div className="main-app-container">
       <div className="main-layout">
-        <StudentPane 
-          subjectsData={bookData.subjects}
-          activeBookId={activeBookId}
-          onSelectBook={handleSelectBook}
-        />
-        
+
+        {/* Left sidebar with collapse toggle */}
+        <div className={`sidebar-wrapper left-sidebar-wrapper ${isLeftCollapsed ? 'collapsed' : ''}`}>
+          <div className="sidebar-inner">
+            <StudentPane
+              subjectsData={bookData.subjects}
+              activeBookId={activeBookId}
+              onSelectBook={handleSelectBook}
+            />
+          </div>
+          <button
+            className="sidebar-toggle-btn left-toggle-btn"
+            onClick={() => setIsLeftCollapsed(!isLeftCollapsed)}
+            title={isLeftCollapsed ? 'Expand' : 'Collapse'}
+          >
+            {isLeftCollapsed ? '›' : '‹'}
+          </button>
+        </div>
+
+        {/* Center pane */}
         <div className="center-wrapper">
           <div className="glass-pane center-pane">
-            <div className="center-header">
-              <h2>Main Pane</h2>
-            </div>
-            <BookPane 
+            <BookPane
               book={activeBookData}
               activeChapterId={activeChapterId}
               onSelectChapter={handleSelectChapter}
@@ -62,7 +65,20 @@ const MainApp = () => {
           </div>
         </div>
 
-        <AIAssistant />
+        {/* Right sidebar with collapse toggle */}
+        <div className={`sidebar-wrapper right-sidebar-wrapper ${isRightCollapsed ? 'collapsed' : ''}`}>
+          <button
+            className="sidebar-toggle-btn right-toggle-btn"
+            onClick={() => setIsRightCollapsed(!isRightCollapsed)}
+            title={isRightCollapsed ? 'Expand' : 'Collapse'}
+          >
+            {isRightCollapsed ? '‹' : '›'}
+          </button>
+          <div className="sidebar-inner">
+            <AIAssistant />
+          </div>
+        </div>
+
       </div>
     </div>
   );
