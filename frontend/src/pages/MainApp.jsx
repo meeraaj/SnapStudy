@@ -31,6 +31,18 @@ const MainApp = () => {
   };
 
   const activeBookData = activeBookId ? bookData.books[activeBookId] : null;
+  const activeChapterTitle = (() => {
+    if (!activeBookData || !activeChapterId) return '';
+    for (const ch of activeBookData.toc || []) {
+      if (ch.id === activeChapterId) return ch.title;
+      if (ch.subtopics) {
+        const sub = ch.subtopics.find(s => s.id === activeChapterId);
+        if (sub) return sub.title;
+      }
+    }
+    return '';
+  })();
+  const activeChapterContent = activeBookData?.content?.[activeChapterId] || '';
 
   return (
     <div className="main-app-container">
@@ -75,7 +87,11 @@ const MainApp = () => {
             {isRightCollapsed ? '‹' : '›'}
           </button>
           <div className="sidebar-inner">
-            <AIAssistant />
+            <AIAssistant 
+              activeChapterId={activeChapterId}
+              chapterTitle={activeChapterTitle}
+              chapterContent={activeChapterContent}
+            />
           </div>
         </div>
 

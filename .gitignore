@@ -15,3 +15,12 @@ data/
 
 # OS specific
 .DS_Store
+
+# Dependencies & Build outputs
+node_modules/
+.turbo/
+.next/
+dist/
+build/
+out/
+.env*.local
